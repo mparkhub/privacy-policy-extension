@@ -1,0 +1,1 @@
+console.log("content.js script is running!");
