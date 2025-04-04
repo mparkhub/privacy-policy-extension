@@ -41,4 +41,22 @@ function findPrivacyLinks() {
     }
 }
 
-findPrivacyLinks();
+function scrapePolicy() {
+    console.log("Scraping privacy policy.");
+    let policyText = document.body.innerText;
+    console.log("Scraped text: ", policyText);
+
+    chrome.runtime.sendMessage({
+        type: "privacyText",
+        payload: {
+            url: window.location.href,
+            text: policyText
+        }
+    });
+}
+
+if(window.location.href.includes("privacy")) {
+    scrapePolicy();
+} else {
+    findPrivacyLinks();
+}
