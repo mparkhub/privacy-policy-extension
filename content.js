@@ -7,7 +7,6 @@ function sleep(ms) {
 
 // Search for privacy policy links using multiple strategies
 async function findPrivacyLinks() {
-    // Strategy 1: Check footer links explicitly
     const footerLinks = [...document.querySelectorAll('footer a')]
         .filter(a => a.innerText.toLowerCase().includes('privacy'));
 
@@ -16,7 +15,6 @@ async function findPrivacyLinks() {
         return footerLinks[0].href;
     }
 
-    // Strategy 2: Check sidebar after expanding dynamic menus
     const menuButton = document.querySelector('button[aria-label="More Options"]');
     if (menuButton) {
         menuButton.click();
@@ -32,7 +30,6 @@ async function findPrivacyLinks() {
         }
     }
 
-    // Strategy 3: General link search across the whole page
     const privacyLinks = [...document.querySelectorAll('a, button')]
         .filter(el => el.innerText.toLowerCase().includes('privacy'));
 
@@ -44,14 +41,12 @@ async function findPrivacyLinks() {
         }
     }
 
-    // Strategy 4: Check Shadow DOM elements
     const shadowLinks = getShadowDomLinks();
     if (shadowLinks.length > 0) {
         console.log("Privacy policy found in Shadow DOM:", shadowLinks[0].href);
         return shadowLinks[0].href;
     }
 
-    // Strategy 5: Attempt common URL patterns
     const commonPath = await tryCommonPaths();
     if (commonPath) return commonPath;
 
@@ -59,7 +54,7 @@ async function findPrivacyLinks() {
     return null;
 }
 
-// Scrape the privacy policy content from the page
+// Scrape the privacy policy content from the current page
 function scrapePolicy() {
     console.log("Scraping privacy policy.");
     const policyElement = document.querySelector('main, article');
@@ -128,7 +123,7 @@ function observeDynamicContent() {
                 const link = await findPrivacyLinks();
                 if (link) {
                     observer.disconnect();
-                    window.location.href = link;
+                    fetchAndAnalyze(link);
                     break;
                 }
             }
@@ -138,11 +133,33 @@ function observeDynamicContent() {
     observer.observe(document.body, { childList: true, subtree: true });
 }
 
+// Fetch and analyze privacy policy without redirecting user
+async function fetchAndAnalyze(link) {
+    console.log("Fetching privacy policy from:", link);
+    try {
+        const response = await fetch(link);
+        const html = await response.text();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, "text/html");
+        const policyText = doc.querySelector("main, article, body")?.innerText || "";
+
+        chrome.runtime.sendMessage({
+            type: "privacyText",
+            payload: {
+                url: link,
+                text: policyText
+            }
+        });
+    } catch (error) {
+        console.warn("Failed to fetch privacy policy:", error);
+    }
+}
+
 // Comprehensive workflow to robustly locate and scrape privacy policies
 async function robustPrivacyFinder() {
     let link = await findPrivacyLinks();
     if (link) {
-        window.location.href = link;
+        await fetchAndAnalyze(link);
         return;
     }
 
