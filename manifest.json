@@ -2,16 +2,21 @@
     "manifest_version": 3,
     "name": "Privacy Policy Analyzer",
     "version": "1.0",
-    "description": "This extension analyzes the privacy policy of the website you are visiting and assigns it a privacy score.",
-    "permissions": ["scripting", "storage", "activeTab"],
+    "description": "Analyzes privacy policies on webpages.",
+    "permissions": ["scripting", "storage"],
     "host_permissions": ["<all_urls>"],
     "background": {
-        "service_worker": "background.js"
+      "service_worker": "background.js"
     },
     "content_scripts": [
-        {
-            "matches": ["<all_urls>"],
-            "js": ["content.js"]
-        }
-    ]
-}
+      {
+        "matches": ["<all_urls>"],
+        "js": ["content.js"],
+        "run_at": "document_idle"
+      }
+    ],
+    "action": {
+      "default_popup": "popup.html"
+    }
+  }
+  
