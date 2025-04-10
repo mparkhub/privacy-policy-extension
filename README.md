@@ -9,28 +9,36 @@ This project is being developed as part of a group project for **CS4930: Privacy
 
 ## Features
 - ✅ Automatically finds links to privacy policies on web pages  
-- ✅ Detects changes to the page and scans for newly loaded privacy links  
-- 🔜 (Planned) Scrapes privacy policy content  
-- 🔜 (Planned) Parses the content for concerning keywords  
-- 🔜 (Planned) Calculates and displays a privacy risk score  
+- ✅ Dynamically handles shadow DOM and common URL structures  
+- ✅ Fetches and analyzes privacy policy content **without redirecting the user**  
+- ✅ Parses the content for concerning and trustworthy keywords  
+- ✅ Calculates a privacy risk score from a **balanced, weighted system**  
+- ✅ Avoids over-penalizing by detecting positive privacy practices  
 
 ---
 
 ## How It Works
 
-### 1. Content Script (`content.js`)
-- Searches for links that include the word "privacy."  
-- Logs the link to the console if found.  
-- Observes dynamic page changes to catch privacy links that load later.
+### 1. `content.js`
+- Scans the current site for privacy policy links using multiple strategies:
+  - Footer, header, dynamic menus, Shadow DOM, and common paths
+- If a link is found, it **fetches** the linked page content in the background
+- Scrapes main text sections from the page (`<main>`, `<article>`, or `body`)
+- Sends the cleaned text to the background script for analysis
 
-### 2. Manifest (`manifest.json`)
-- Registers the content script to run on all URLs.  
-- Declares permissions to interact with page content and store analysis results.
+### 2. `background.js`
+- Receives the text and applies a robust keyword matching system
+- Keywords are weighted (+ for concerning terms, − for good practices)
+- Outputs a **composite score** and classifies risk as:
+  - Low Risk
+  - Moderate Risk
+  - Elevated Risk
+  - High Risk
+  - Severe Risk
 
-### 3. Next Steps (In Development)
-- Follow the privacy policy link and scrape its content.  
-- Analyze the scraped content for concerning privacy keywords.  
-- Generate a privacy score and display it to the user (via popup or injected into the page).
+### 3. `manifest.json`
+- Declares permissions for scripting, messaging, and full URL access
+- Enables the extension to run content and background scripts
 
 ---
 
@@ -39,39 +47,44 @@ This project is being developed as part of a group project for **CS4930: Privacy
 2. Open **Chrome** and go to `chrome://extensions/`.
 3. Enable **Developer Mode**.
 4. Click **Load unpacked** and select the extension folder.
-5. Navigate to any website and open the console to see privacy link detection in action.
+5. Visit any website. The extension will silently locate and rate the site's privacy policy.
 
 ---
 
-## Planned Keyword Detection
-- `third-party`  
-- `data retention`  
-- `sale of data`  
-- `cookies`  
-- `personal information`  
-- `advertising`  
-- `opt-out`  
-- _And more..._
+## Planned Keyword Detection (Examples)
+Includes both concerning and good-practice terms like:
+- `sale of data`
+- `tracking user behavior`
+- `health information`
+- `biometric data`
+- `we do not share information`
+- `data encryption`
+- `user rights`
+
+See `background.js` for the full weighted keyword list.
 
 ---
 
 ## Files
-
-| File          | Purpose                                                |
-|---------------|--------------------------------------------------------|
-| `content.js`  | Scans for privacy policy links and observes DOM changes |
-| `manifest.json` | Configures extension settings and permissions        |
-| `.gitignore`  | Ignores unnecessary files and folders                  |
-| `README.md`   | Project overview and documentation                     |
+| File            | Purpose                                                  |
+|-----------------|----------------------------------------------------------|
+| `content.js`    | Scans pages and fetches privacy policy text             |
+| `background.js` | Analyzes policy text and calculates privacy score       |
+| `manifest.json` | Declares extension metadata and script permissions      |
+| `README.md`     | Project documentation and status                        |
+| `.gitignore`    | Prevents irrelevant files from being committed          |
 
 ---
 
 ## Roadmap
-- [x] Detect privacy policy links  
-- [ ] Scrape privacy policy content  
-- [ ] Parse for concerning keywords  
-- [ ] Calculate privacy score  
-- [ ] Display results in extension popup or webpage overlay  
+- [x] Find and follow privacy policy links
+- [x] Handle Shadow DOM and dynamic elements
+- [x] Brute-force common URL patterns
+- [x] Fetch policy content without redirecting user
+- [x] Parse and classify keywords
+- [x] Balance score with good and bad indicators
+- [ ] Display user-facing result (popup or banner UI)
+- [ ] Export or visualize history of site ratings
 
 ---
 
@@ -79,4 +92,3 @@ This project is being developed as part of a group project for **CS4930: Privacy
 - **Gunnar Anderson**  
 - **Tyler Andrews**  
 - **Morgan Parker**
-
