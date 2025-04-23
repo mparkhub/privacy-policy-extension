@@ -1,0 +1,102 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 400px;
+  box-sizing: border-box;
+  overflow: hidden;
+  font-family: monospace;
+  background-color: black;
+  color: white;
+  position: relative;
+}
+
+#matrixCanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 0; /* BELOW your content */
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* so it doesn’t block clicks */
+  opacity: 0.25;
+}
+
+
+#popup {
+  position: relative;
+  z-index: 1;
+  padding: 12px;
+}
+
+.card {
+  background: rgba(0, 0, 0, 0.85);
+  border: 1px solid #00ff00;
+  border-radius: 10px;
+  padding: 16px;
+  width: 100%;
+  box-sizing: border-box;
+
+}
+
+.title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #00ff00;
+}
+
+.risk-level {
+  margin-bottom: 8px;
+  font-size: 14px;
+  text-align: center;
+  text-shadow: 0 0 2px black;
+
+}
+
+.progress {
+  margin-bottom: 10px;
+}
+
+.site-info {
+  margin-top: 8px;
+  font-size: 16px;
+  color: #ccc;
+}
+
+.keywords-title {
+  margin-top: 12px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #00ffff;
+}
+
+.keywords-list {
+  word-break: break-word;
+  font-size: 12px;
+  padding-right: 10px;
+}
+
+.keywords-list li {
+  margin-bottom: 2px;
+}
+
+button {
+  margin-top: 12px;
+  width: 100%;
+  padding: 8px;
+  background: #00ff00;
+  color: black;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+button:hover {
+  background-color: #55ff55;
+}
+
+.card-content {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy Analyzer</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <canvas id="matrixCanvas"></canvas>
+
+  <div id="popup" class="p-4 w-80">
+    <div id="loading" style="display: flex; align-items: center; justify-content: center; height: 100%; color: #ccc; text-align: center; font-family: sans-serif;">
+  Loading privacy analysis...
+    </div>
+    <div id="result" style="display: none;">
+      <div class="card">
+        <div class="card-content">
+          <div class="title">🔐 Privacy Score</div>
+          <div id="riskDisplay" class="risk-level"></div>
+          <div id="progressBar" class="progress"></div>
+          <div id="siteInfo" class="site-info"></div>
+          <div class="keywords-title">Keywords Detected:</div>
+          <ul id="keywordsList" class="keywords-list"></ul>
+          <button id="clearCloseBtn">Clear & Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
+
